@@ -17,7 +17,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -30,16 +31,20 @@ a {
   color: inherit;
 }
 
-button:focus-visible,
-input:focus-visible,
-a:focus-visible {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 3px;
+:where(button, input, select, a, summary):focus-visible {
+  outline: 3px solid #d79612;
+  outline-offset: 2px;
 }
 
 .container {
-  width: min(calc(100% - 2rem), var(--container));
+  width: min(calc(100% - clamp(2rem, 5vw, 4rem)), var(--container));
   margin-inline: auto;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(var(--space-3), 2vw, var(--space-5));
 }
 
 .sr-only {
@@ -68,4 +73,10 @@ a:focus-visible {
 
 .skip-link:focus {
   transform: translateY(0);
+}
+
+@media (max-width: 42rem) {
+  .container {
+    width: min(calc(100% - 1.5rem), var(--container));
+  }
 }

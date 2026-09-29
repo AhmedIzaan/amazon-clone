@@ -1,7 +1,7 @@
-import { MapPin, Menu, Search, ShoppingBag } from 'lucide-react'
+import { ChevronDown, MapPin, Menu, Search, ShoppingCart, UserRound } from 'lucide-react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 
-const categoryLinks = ['New', 'Home', 'Audio', 'Workspace', 'Outdoors']
+const categoryLinks = ["Today's finds", 'Home', 'Audio', 'Workspace', 'Outdoors', 'Kitchen']
 
 export function AppShell() {
   return (
@@ -10,14 +10,29 @@ export function AppShell() {
         Skip to content
       </a>
       <header className="site-header">
+        <div className="utility-bar">
+          <div className="container utility-bar__inner">
+            <p>Free delivery on orders over $50</p>
+            <p>Easy 30-day returns</p>
+          </div>
+        </div>
         <div className="header-main container">
-          <button className="icon-button menu-button" type="button" aria-label="Open categories">
+          <a className="icon-button menu-button" href="#category-navigation" aria-label="Jump to categories">
             <Menu aria-hidden="true" />
-          </button>
+          </a>
           <Link className="brand" to="/" aria-label="Aster home">
             aster<span>.</span>
           </Link>
           <form className="global-search" action="/search" role="search">
+            <label className="sr-only" htmlFor="search-category">
+              Search category
+            </label>
+            <select id="search-category" name="category" defaultValue="all">
+              <option value="all">All</option>
+              <option value="home">Home</option>
+              <option value="audio">Audio</option>
+              <option value="outdoors">Outdoors</option>
+            </select>
             <label className="sr-only" htmlFor="site-search">
               Search products
             </label>
@@ -27,26 +42,34 @@ export function AppShell() {
             </button>
           </form>
           <div className="header-actions">
-            <button className="location-button" type="button">
+            <div className="location-button">
               <MapPin aria-hidden="true" />
               <span>
                 Deliver to <strong>Demo address</strong>
               </span>
-            </button>
-            <Link className="account-link" to="/sign-in">
-              Sign in
+            </div>
+            <Link className="account-link" to="/sign-in" aria-label="Sign in to your account">
+              <UserRound aria-hidden="true" />
+              <span>
+                Hello, sign in
+                <strong>Account</strong>
+              </span>
+              <ChevronDown aria-hidden="true" />
             </Link>
             <Link className="cart-link" to="/cart" aria-label="Cart with 0 items">
-              <ShoppingBag aria-hidden="true" />
+              <ShoppingCart aria-hidden="true" />
               <span>Cart</span>
               <strong>0</strong>
             </Link>
           </div>
         </div>
-        <nav className="category-nav" aria-label="Popular categories">
+        <nav id="category-navigation" className="category-nav" aria-label="Popular categories">
           <div className="container category-nav-inner">
             {categoryLinks.map((category) => (
-              <NavLink key={category} to={`/search?category=${category.toLowerCase()}`}>
+              <NavLink
+                key={category}
+                to={`/search?category=${category.toLowerCase().replaceAll(' ', '-')}`}
+              >
                 {category}
               </NavLink>
             ))}

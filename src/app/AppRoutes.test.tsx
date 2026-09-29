@@ -12,8 +12,10 @@ describe('application foundation', () => {
     )
 
     expect(
-      screen.getByRole('heading', { name: /shopping with less noise/i }),
+      screen.getByRole('heading', { name: /useful things, easier to choose/i }),
     ).toBeInTheDocument()
+    expect(screen.getByRole('search')).toBeInTheDocument()
+    expect(screen.getAllByRole('article')).toHaveLength(3)
   })
 
   it('renders a route shell for the cart', () => {
