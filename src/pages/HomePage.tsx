@@ -1,82 +1,128 @@
-import { ArrowRight, BadgeCheck, Headphones, Home, Laptop, Leaf } from 'lucide-react'
+import {
+  ArrowRight,
+  BriefcaseBusiness,
+  CookingPot,
+  Headphones,
+  Home,
+  Laptop,
+  Leaf,
+  ShieldCheck,
+  Sparkles,
+  Truck,
+  Undo2,
+} from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ProductCard } from '../components/catalog/ProductCard'
-import { Button } from '../components/ui/Button'
+import { Badge } from '../components/ui/Badge'
 import { catalog } from '../data/catalog'
 
 const categories = [
-  { label: 'Home refresh', detail: 'Simple upgrades', icon: Home, slug: 'home' },
-  { label: 'Better sound', detail: 'Audio essentials', icon: Headphones, slug: 'audio' },
-  { label: 'Work smarter', detail: 'Desk and tech', icon: Laptop, slug: 'workspace' },
-  { label: 'Get outside', detail: 'Weekend ready', icon: Leaf, slug: 'outdoors' },
+  { label: 'Home', detail: '124 useful finds', icon: Home, slug: 'home' },
+  { label: 'Audio', detail: 'Clearer everyday sound', icon: Headphones, slug: 'audio' },
+  { label: 'Workspace', detail: 'Work a little better', icon: Laptop, slug: 'workspace' },
+  { label: 'Kitchen', detail: 'Daily essentials', icon: CookingPot, slug: 'kitchen' },
+  { label: 'Outdoors', detail: 'Ready for the weekend', icon: Leaf, slug: 'outdoors' },
+  { label: 'Travel', detail: 'Pack smarter', icon: BriefcaseBusiness, slug: 'travel' },
 ]
+
+const recommended = [catalog[0], catalog[4], catalog[1], catalog[2]]
+const deals = [catalog[3], catalog[5]]
 
 export function HomePage() {
   return (
-    <div className="storefront">
-      <section className="storefront-intro container" aria-labelledby="intro-title">
-        <div>
-          <p className="eyebrow">Curated for everyday life</p>
-          <h1 id="intro-title">Useful things, easier to choose.</h1>
-          <p>Well-reviewed essentials with the details that matter up front.</p>
+    <div className="home-page">
+      <section className="home-hero container" aria-labelledby="hero-title">
+        <img
+          className="home-hero__image"
+          src="/images/products/homepage-hero.webp"
+          alt=""
+          width="1600"
+          height="800"
+          fetchPriority="high"
+        />
+        <div className="home-hero__shade" />
+        <div className="home-hero__content">
+          <Badge tone="accent">The everyday edit</Badge>
+          <h1 id="hero-title">Better basics for the way you live now.</h1>
+          <p>Highly rated home, work, and travel essentials—chosen to make the everyday easier.</p>
+          <div className="home-hero__actions">
+            <Link className="button button--primary" to="/search?collection=everyday">
+              Shop the edit <ArrowRight aria-hidden="true" />
+            </Link>
+            <Link className="hero-secondary-link" to="/search?sort=rating">
+              Explore top-rated
+            </Link>
+          </div>
         </div>
-        <Link className="text-link" to="/search">
-          Shop all products <ArrowRight aria-hidden="true" />
-        </Link>
       </section>
 
-      <nav className="category-grid container" aria-label="Shop featured categories">
-        {categories.map(({ label, detail, icon: Icon, slug }) => (
-          <Link className="category-card" to={`/search?category=${slug}`} key={slug}>
-            <span className="category-card__icon"><Icon aria-hidden="true" /></span>
-            <span><strong>{label}</strong><small>{detail}</small></span>
-            <ArrowRight aria-hidden="true" />
-          </Link>
-        ))}
-      </nav>
+      <section className="trust-strip container" aria-label="Shopping benefits">
+        <p><Truck aria-hidden="true" /><span><strong>Fast, free delivery</strong> on orders over $50</span></p>
+        <p><Undo2 aria-hidden="true" /><span><strong>Easy returns</strong> within 30 days</span></p>
+        <p><ShieldCheck aria-hidden="true" /><span><strong>Curated quality</strong> from trusted makers</span></p>
+      </section>
 
-      <section className="product-section container" aria-labelledby="featured-title">
+      <section className="home-section container" aria-labelledby="categories-title">
         <header className="section-heading">
           <div>
-            <p className="eyebrow">Popular right now</p>
-            <h2 id="featured-title">Customer favorites</h2>
+            <p className="eyebrow">Start somewhere useful</p>
+            <h2 id="categories-title">Shop by category</h2>
           </div>
-          <Link className="text-link" to="/search?sort=rating">
-            See more <ArrowRight aria-hidden="true" />
-          </Link>
         </header>
-        <div className="product-grid">
-          {catalog.map((product) => <ProductCard product={product} key={product.id} />)}
+        <nav className="category-grid" aria-label="Shop departments">
+          {categories.map(({ label, detail, icon: Icon, slug }) => (
+            <Link className="category-card" to={`/search?category=${slug}`} key={slug}>
+              <span className="category-card__icon"><Icon aria-hidden="true" /></span>
+              <span><strong>{label}</strong><small>{detail}</small></span>
+              <ArrowRight aria-hidden="true" />
+            </Link>
+          ))}
+        </nav>
+      </section>
+
+      <section className="home-section home-section--surface" aria-labelledby="recommended-title">
+        <div className="container">
+          <header className="section-heading">
+            <div>
+              <p className="eyebrow"><Sparkles aria-hidden="true" /> Picked for your routine</p>
+              <h2 id="recommended-title">Recommended for you</h2>
+              <p className="section-heading__description">Popular choices across the categories you browse most.</p>
+            </div>
+            <Link className="text-link" to="/search?collection=recommended">
+              See all recommendations <ArrowRight aria-hidden="true" />
+            </Link>
+          </header>
+          <div className="product-grid product-grid--four">
+            {recommended.map((product) => <ProductCard product={product} key={product.id} />)}
+          </div>
         </div>
       </section>
 
-      <section className="finder container" aria-labelledby="finder-title">
-        <div className="finder__copy">
-          <BadgeCheck aria-hidden="true" />
+      <section className="home-section container" aria-labelledby="deals-title">
+        <header className="section-heading">
           <div>
-            <h2 id="finder-title">Find the right pick faster</h2>
-            <p>Start with what matters, then narrow the details.</p>
+            <p className="eyebrow">Limited-time prices</p>
+            <h2 id="deals-title">Deals worth seeing</h2>
+            <p className="section-heading__description">Meaningful savings on well-rated essentials, not a wall of coupons.</p>
           </div>
+          <Link className="text-link" to="/search?deals=true">
+            Shop all deals <ArrowRight aria-hidden="true" />
+          </Link>
+        </header>
+        <div className="deal-grid">
+          {deals.map((product) => <ProductCard product={product} compact key={product.id} />)}
         </div>
-        <form className="finder__form" action="/search">
-          <div className="field">
-            <label htmlFor="finder-category">I'm shopping for</label>
-            <select id="finder-category" name="category" defaultValue="audio">
-              <option value="audio">Headphones & audio</option>
-              <option value="home">Home essentials</option>
-              <option value="outdoors">Outdoor gear</option>
-            </select>
-          </div>
-          <div className="field">
-            <label htmlFor="finder-budget">My budget is</label>
-            <select id="finder-budget" name="price" defaultValue="150">
-              <option value="50">Under $50</option>
-              <option value="100">Under $100</option>
-              <option value="150">Under $150</option>
-            </select>
-          </div>
-          <Button type="submit">Show my picks <ArrowRight aria-hidden="true" /></Button>
-        </form>
+      </section>
+
+      <section className="discovery-banner container" aria-labelledby="discovery-title">
+        <div>
+          <p className="eyebrow">Not sure where to start?</p>
+          <h2 id="discovery-title">Tell us what matters. We'll narrow the shelf.</h2>
+          <p>Shop by use, budget, and the features you actually care about.</p>
+        </div>
+        <Link className="button button--secondary" to="/search">
+          Find your next favorite <ArrowRight aria-hidden="true" />
+        </Link>
       </section>
     </div>
   )

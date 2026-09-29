@@ -43,4 +43,5 @@ export interface Product {
   badges: string[]
   inStock: boolean
   deliveryDays: number
+  isBestSeller?: boolean
 }

@@ -6,6 +6,7 @@ html {
   min-width: 20rem;
   background: var(--color-paper);
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
@@ -14,6 +15,7 @@ body {
   margin: 0;
   background: var(--color-paper);
   color: var(--color-ink);
+  overflow-x: clip;
 }
 
 button,

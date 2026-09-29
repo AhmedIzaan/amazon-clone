@@ -1,9 +1,12 @@
 import { ChevronDown, MapPin, Menu, Search, ShoppingCart, UserRound } from 'lucide-react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
+import { useCart } from '../../state/cart-context'
 
 const categoryLinks = ["Today's finds", 'Home', 'Audio', 'Workspace', 'Outdoors', 'Kitchen']
 
 export function AppShell() {
+  const { itemCount } = useCart()
+
   return (
     <div className="site-shell">
       <a className="skip-link" href="#main-content">
@@ -56,10 +59,14 @@ export function AppShell() {
               </span>
               <ChevronDown aria-hidden="true" />
             </Link>
-            <Link className="cart-link" to="/cart" aria-label="Cart with 0 items">
+            <Link
+              className="cart-link"
+              to="/cart"
+              aria-label={`Cart with ${itemCount} ${itemCount === 1 ? 'item' : 'items'}`}
+            >
               <ShoppingCart aria-hidden="true" />
               <span>Cart</span>
-              <strong>0</strong>
+              <strong>{itemCount}</strong>
             </Link>
           </div>
         </div>
