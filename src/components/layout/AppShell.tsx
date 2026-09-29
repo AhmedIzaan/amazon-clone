@@ -1,5 +1,6 @@
-import { ChevronDown, MapPin, Menu, Search, ShoppingCart, UserRound } from 'lucide-react'
+import { ChevronDown, MapPin, Menu, ShoppingCart, UserRound } from 'lucide-react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
+import { SearchBox } from '../search/SearchBox'
 import { useCart } from '../../state/cart-context'
 
 const categoryLinks = ["Today's finds", 'Home', 'Audio', 'Workspace', 'Outdoors', 'Kitchen']
@@ -26,24 +27,7 @@ export function AppShell() {
           <Link className="brand" to="/" aria-label="Aster home">
             aster<span>.</span>
           </Link>
-          <form className="global-search" action="/search" role="search">
-            <label className="sr-only" htmlFor="search-category">
-              Search category
-            </label>
-            <select id="search-category" name="category" defaultValue="all">
-              <option value="all">All</option>
-              <option value="home">Home</option>
-              <option value="audio">Audio</option>
-              <option value="outdoors">Outdoors</option>
-            </select>
-            <label className="sr-only" htmlFor="site-search">
-              Search products
-            </label>
-            <input id="site-search" name="q" placeholder="Search thoughtful everyday goods" />
-            <button type="submit" aria-label="Submit search">
-              <Search aria-hidden="true" />
-            </button>
-          </form>
+          <SearchBox />
           <div className="header-actions">
             <div className="location-button">
               <MapPin aria-hidden="true" />
