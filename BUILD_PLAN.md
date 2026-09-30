@@ -146,3 +146,13 @@ Checkout stays on one route with internal steps. This avoids route and persisten
 7. Responsive/accessibility pass, end-to-end test, and polish.
 
 Each phase must work end-to-end before starting the next. Nice-to-have work begins only after the full core journey passes.
+
+## Post-MVP differentiation pass
+
+The final polish pass will add three connected improvements focused on helping shoppers make a confident decision faster:
+
+1. **Side-by-side product comparison.** Shoppers can collect up to three products from existing cards and compare price, rating, delivery, key features, and specifications in one focused view. This solves the tab-hopping and memory burden common in dense marketplaces. It is worth the remaining time because it creates the clearest product-level differentiator while reusing the typed catalog and existing cards.
+2. **Review insights.** Product pages will turn the small authored review dataset into a concise “buyers agree / consider this” summary beside the rating distribution. This answers “can I trust it?” more quickly than asking users to scan every review. Deterministic local summaries add visible decision support without introducing an API, generated-content latency, or reliability risk.
+3. **Recently viewed products.** Visiting a product will add it to a short local history surfaced on the homepage. This preserves discovery context after comparison or checkout detours and makes the marketplace feel responsive to the shopper. The feature is small, local, and low-risk because it reuses product cards and versioned browser storage.
+
+These features form one coherent evaluation loop—remember candidates, compare them, then understand buyer sentiment—rather than three unrelated embellishments. The existing URL-backed filters and mobile sticky purchase bar already address fast refinement and mobile conversion, so this pass will not rebuild them.

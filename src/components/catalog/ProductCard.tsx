@@ -1,4 +1,4 @@
-import { Check, ShoppingCart } from 'lucide-react'
+import { Check, Scale, ShoppingCart } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../../state/cart-context'
@@ -7,6 +7,7 @@ import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
 import { Price } from './Price'
 import { Rating } from './Rating'
+import { useComparison } from '../../state/comparison-context'
 
 interface ProductCardProps {
   product: Product
@@ -15,7 +16,10 @@ interface ProductCardProps {
 
 export function ProductCard({ product, compact = false }: ProductCardProps) {
   const { addItem } = useCart()
+  const { isSelected, toggleProduct } = useComparison()
   const [isAdded, setIsAdded] = useState(false)
+  const [compareMessage, setCompareMessage] = useState('')
+  const isCompared = isSelected(product.id)
 
   useEffect(() => {
     if (!isAdded) return
@@ -27,6 +31,11 @@ export function ProductCard({ product, compact = false }: ProductCardProps) {
     const defaultVariant = product.variants.find((variant) => variant.inStock)
     addItem(product.id, 1, defaultVariant?.id)
     setIsAdded(true)
+  }
+
+  function handleCompare() {
+    const result = toggleProduct(product.id)
+    setCompareMessage(result === 'limit' ? 'Remove a product before adding another.' : '')
   }
 
   return (
@@ -54,14 +63,13 @@ export function ProductCard({ product, compact = false }: ProductCardProps) {
           {product.deliveryDays <= 2 && <span className="delivery-mark">Aster+</span>}
           <strong>Free delivery</strong> {product.deliveryDays === 1 ? 'tomorrow' : `in ${product.deliveryDays} days`}
         </p>
-        <Button
-          className="product-card__button"
-          aria-label={isAdded ? `${product.title} added to cart` : `Add ${product.title} to cart`}
-          onClick={handleAdd}
-        >
-          {isAdded ? <Check aria-hidden="true" /> : <ShoppingCart aria-hidden="true" />}
-          {isAdded ? 'Added' : 'Add to cart'}
-        </Button>
+        <div className="product-card__actions">
+          <Button className="product-card__button" aria-label={isAdded ? `${product.title} added to cart` : `Add ${product.title} to cart`} onClick={handleAdd}>
+            {isAdded ? <Check aria-hidden="true" /> : <ShoppingCart aria-hidden="true" />}{isAdded ? 'Added' : 'Add to cart'}
+          </Button>
+          <button className={`product-card__compare${isCompared ? ' is-selected' : ''}`} type="button" aria-pressed={isCompared} onClick={handleCompare}><Scale aria-hidden="true" />{isCompared ? 'Compared' : 'Compare'}</button>
+        </div>
+        {compareMessage && <small className="product-card__compare-limit" role="status">{compareMessage}</small>}
         <span className="sr-only" aria-live="polite">{isAdded ? `${product.title} added to cart` : ''}</span>
       </div>
     </article>

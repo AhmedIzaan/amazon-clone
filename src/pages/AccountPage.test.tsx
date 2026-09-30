@@ -6,11 +6,12 @@ import { ORDERS_STORAGE_KEY, type DemoOrder } from '../checkout/order'
 import { AuthProvider } from '../state/AuthContext'
 import { AUTH_STORAGE_KEY } from '../state/auth-context'
 import { CartProvider } from '../state/CartContext'
+import { ComparisonProvider } from '../state/ComparisonContext'
 
 function renderRoute(route: string) {
   return render(
     <MemoryRouter initialEntries={[route]}>
-      <AuthProvider><CartProvider><AppRoutes /></CartProvider></AuthProvider>
+      <AuthProvider><ComparisonProvider><CartProvider><AppRoutes /></CartProvider></ComparisonProvider></AuthProvider>
     </MemoryRouter>,
   )
 }

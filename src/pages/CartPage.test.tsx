@@ -4,12 +4,13 @@ import { MemoryRouter } from 'react-router-dom'
 import { AppRoutes } from '../app/AppRoutes'
 import { CartProvider } from '../state/CartContext'
 import { AuthProvider } from '../state/AuthContext'
+import { ComparisonProvider } from '../state/ComparisonContext'
 import { CART_STORAGE_KEY } from '../state/cart-context'
 
 function renderRoute(route: string) {
   return render(
     <MemoryRouter initialEntries={[route]}>
-      <AuthProvider><CartProvider><AppRoutes /></CartProvider></AuthProvider>
+      <AuthProvider><ComparisonProvider><CartProvider><AppRoutes /></CartProvider></ComparisonProvider></AuthProvider>
     </MemoryRouter>,
   )
 }

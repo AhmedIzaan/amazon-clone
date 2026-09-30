@@ -12,9 +12,11 @@ import {
   Undo2,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { ProductCard } from '../components/catalog/ProductCard'
 import { Badge } from '../components/ui/Badge'
 import { catalog } from '../data/catalog'
+import { getRecentlyViewedProducts } from '../state/recently-viewed'
 
 const categories = [
   { label: 'Home', detail: '124 useful finds', icon: Home, slug: 'home' },
@@ -29,6 +31,7 @@ const recommended = [catalog[0], catalog[4], catalog[1], catalog[2]]
 const deals = [catalog[3], catalog[5]]
 
 export function HomePage() {
+  const [recentlyViewed] = useState(getRecentlyViewedProducts)
   return (
     <div className="home-page">
       <section className="home-hero container" aria-labelledby="hero-title">
@@ -124,6 +127,13 @@ export function HomePage() {
           Find your next favorite <ArrowRight aria-hidden="true" />
         </Link>
       </section>
+
+      {recentlyViewed.length > 0 && (
+        <section className="home-section home-section--recent container" aria-labelledby="recently-viewed-title">
+          <header className="section-heading"><div><p className="eyebrow">Pick up where you left off</p><h2 id="recently-viewed-title">Recently viewed</h2><p className="section-heading__description">Your latest product views, stored only in this browser.</p></div></header>
+          <div className="product-grid product-grid--four">{recentlyViewed.map((product) => <ProductCard product={product} compact key={product.id} />)}</div>
+        </section>
+      )}
     </div>
   )
 }

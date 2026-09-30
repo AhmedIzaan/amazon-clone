@@ -6,6 +6,7 @@ import { ORDERS_STORAGE_KEY } from '../checkout/order'
 import { CartProvider } from '../state/CartContext'
 import { AuthProvider } from '../state/AuthContext'
 import { AUTH_STORAGE_KEY } from '../state/auth-context'
+import { ComparisonProvider } from '../state/ComparisonContext'
 import { CART_STORAGE_KEY } from '../state/cart-context'
 
 function seedCart() {
@@ -18,7 +19,7 @@ function seedCart() {
 function renderRoute(route = '/checkout') {
   return render(
     <MemoryRouter initialEntries={[route]}>
-      <AuthProvider><CartProvider><AppRoutes /></CartProvider></AuthProvider>
+      <AuthProvider><ComparisonProvider><CartProvider><AppRoutes /></CartProvider></ComparisonProvider></AuthProvider>
     </MemoryRouter>,
   )
 }

@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { catalog } from '../../data/catalog'
 import { ProductCard } from './ProductCard'
 import { CartProvider } from '../../state/CartContext'
+import { ComparisonProvider } from '../../state/ComparisonContext'
 
 describe('ProductCard', () => {
   it('presents the key buying signals accessibly', () => {
@@ -11,9 +12,9 @@ describe('ProductCard', () => {
 
     render(
       <MemoryRouter>
-        <CartProvider>
+        <ComparisonProvider><CartProvider>
           <ProductCard product={product} />
-        </CartProvider>
+        </CartProvider></ComparisonProvider>
       </MemoryRouter>,
     )
 

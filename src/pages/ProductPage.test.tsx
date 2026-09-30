@@ -4,11 +4,13 @@ import { MemoryRouter } from 'react-router-dom'
 import { AppRoutes } from '../app/AppRoutes'
 import { CartProvider } from '../state/CartContext'
 import { AuthProvider } from '../state/AuthContext'
+import { ComparisonProvider } from '../state/ComparisonContext'
+import { RECENTLY_VIEWED_STORAGE_KEY } from '../state/recently-viewed'
 
 function renderProduct(slug: string) {
   return render(
     <MemoryRouter initialEntries={[`/products/${slug}`]}>
-      <AuthProvider><CartProvider><AppRoutes /></CartProvider></AuthProvider>
+      <AuthProvider><ComparisonProvider><CartProvider><AppRoutes /></CartProvider></ComparisonProvider></AuthProvider>
     </MemoryRouter>,
   )
 }
@@ -50,5 +52,16 @@ describe('ProductPage', () => {
     expect(screen.getAllByLabelText('$24.00, 25% off').length).toBeGreaterThan(0)
     expect(screen.getByText(/based on 1,284 customer ratings/i)).toBeInTheDocument()
     expect(screen.getByText(/verified purchase/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /commuter-friendly everyday tumbler/i })).toBeInTheDocument()
+    expect(screen.getByText(/summary generated from curated demo review themes/i)).toBeInTheDocument()
+    expect(window.localStorage.getItem(RECENTLY_VIEWED_STORAGE_KEY)).toContain('kitchen-001')
+  })
+
+  it('surfaces viewed products when the shopper returns home', () => {
+    renderProduct('trail-daypack')
+    fireEvent.click(screen.getByLabelText('Aster home'))
+
+    expect(screen.getByRole('heading', { name: 'Recently viewed' })).toBeInTheDocument()
+    expect(screen.getAllByRole('heading', { name: /trail 18l everyday daypack/i }).length).toBeGreaterThan(0)
   })
 })

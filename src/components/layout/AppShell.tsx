@@ -4,6 +4,7 @@ import { SearchBox } from '../search/SearchBox'
 import { useCart } from '../../state/cart-context'
 import { CartToast } from '../cart/CartToast'
 import { useAuth } from '../../state/auth-context'
+import { ComparisonTray } from '../comparison/ComparisonTray'
 
 const categoryLinks = ["Today's finds", 'Home', 'Audio', 'Workspace', 'Outdoors', 'Kitchen']
 
@@ -94,6 +95,7 @@ export function AppShell() {
         </div>
       </footer>
       {!isCheckout && <CartToast />}
+      {!isCheckout && <ComparisonTray />}
     </div>
   )
 }

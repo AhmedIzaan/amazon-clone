@@ -8,6 +8,7 @@ import {
   Star,
   Truck,
   ZoomIn,
+  Scale,
 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -20,6 +21,9 @@ import { catalog } from '../data/catalog'
 import { useCart } from '../state/cart-context'
 import type { Product } from '../types/catalog'
 import { NotFoundPage } from './NotFoundPage'
+import { useComparison } from '../state/comparison-context'
+import { recordRecentlyViewed } from '../state/recently-viewed'
+import { getReviewInsight } from '../data/reviewInsights'
 
 const galleryViews = ['Full view', 'Closer look', 'Material detail']
 
@@ -44,11 +48,14 @@ export function ProductPage() {
 function ProductDetail({ product }: { product: Product }) {
   const navigate = useNavigate()
   const { addItem } = useCart()
+  const { isSelected, toggleProduct } = useComparison()
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedVariantId, setSelectedVariantId] = useState(product.variants[0]?.id ?? '')
   const [quantity, setQuantity] = useState(1)
   const [confirmation, setConfirmation] = useState('')
+  const [comparisonMessage, setComparisonMessage] = useState('')
   const selectedVariant = product.variants.find((variant) => variant.id === selectedVariantId)
+  const isCompared = isSelected(product.id)
   const selectedPrice = selectedVariant?.price ?? product.price
   const canPurchase = product.inStock && (selectedVariant?.inStock ?? true)
   const deliveryDate = formatDeliveryDate(product.deliveryDays)
@@ -65,6 +72,11 @@ function ProductDetail({ product }: { product: Product }) {
     ...catalog.filter((item) => item.id !== product.id && item.category === product.category),
     ...catalog.filter((item) => item.id !== product.id && item.category !== product.category),
   ].slice(0, 3), [product])
+  const reviewInsight = getReviewInsight(product.id, product.features)
+
+  useEffect(() => {
+    recordRecentlyViewed(product.id)
+  }, [product.id])
 
   useEffect(() => {
     if (!confirmation) return
@@ -128,6 +140,8 @@ function ProductDetail({ product }: { product: Product }) {
           <a className="product-summary__rating" href="#customer-reviews">
             <Rating rating={product.rating} reviewCount={product.reviewCount} />
           </a>
+          <button className={`product-compare-action${isCompared ? ' is-selected' : ''}`} type="button" aria-pressed={isCompared} onClick={() => { const result = toggleProduct(product.id); setComparisonMessage(result === 'limit' ? 'Your comparison is full. Remove one of the three products to add this item.' : '') }}><Scale aria-hidden="true" />{isCompared ? 'Added to comparison' : 'Add to comparison'}</button>
+          {comparisonMessage && <small className="product-compare-message" role="status">{comparisonMessage}</small>}
           <p className="product-summary__description">{product.description}</p>
           <div className="decision-strip" aria-label="Product highlights">
             <span><Star aria-hidden="true" /><strong>{product.rating}/5</strong> highly rated</span>
@@ -222,6 +236,13 @@ function ProductDetail({ product }: { product: Product }) {
                 const width = ratingDistribution[index]
                 return <div className="rating-bar" key={stars}><span>{stars} star</span><i><b style={{ width: `${width}%` }} /></i><small>{width}%</small></div>
               })}
+              <div className="review-insights">
+                <p className="eyebrow">Review insights</p>
+                <h3>{reviewInsight.headline}</h3>
+                <ul>{reviewInsight.positives.map((positive) => <li key={positive}><Check aria-hidden="true" />{positive}</li>)}</ul>
+                <p><strong>Worth knowing:</strong> {reviewInsight.consideration}</p>
+                <small>Summary generated from curated demo review themes.</small>
+              </div>
             </div>
             <div className="review-list">
               {product.reviews.map((review) => (

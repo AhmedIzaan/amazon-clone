@@ -4,14 +4,15 @@ import { describe, expect, it } from 'vitest'
 import { AppRoutes } from './AppRoutes'
 import { CartProvider } from '../state/CartContext'
 import { AuthProvider } from '../state/AuthContext'
+import { ComparisonProvider } from '../state/ComparisonContext'
 
 function renderRoute(route: string) {
   return render(
     <MemoryRouter initialEntries={[route]}>
       <AuthProvider>
-        <CartProvider>
+        <ComparisonProvider><CartProvider>
           <AppRoutes />
-        </CartProvider>
+        </CartProvider></ComparisonProvider>
       </AuthProvider>
     </MemoryRouter>,
   )
