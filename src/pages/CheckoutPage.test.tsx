@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
 import { AppRoutes } from '../app/AppRoutes'
@@ -30,7 +30,7 @@ describe('CheckoutPage', () => {
     window.sessionStorage.clear()
   })
 
-  it('validates delivery and demo payment fields', () => {
+  it('validates delivery and demo payment fields', async () => {
     seedCart()
     renderRoute()
 
@@ -38,6 +38,8 @@ describe('CheckoutPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /continue to delivery/i }))
     expect(screen.getByText(/enter a valid email address/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /delivery address/i })).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByLabelText('Email')).toHaveFocus())
+    expect(screen.getAllByRole('main')).toHaveLength(1)
 
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'alex@example.com' } })
     fireEvent.click(screen.getByRole('button', { name: /continue to delivery/i }))
@@ -47,6 +49,7 @@ describe('CheckoutPage', () => {
 
     expect(screen.getByText(/use the demo card number shown above/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /demo payment/i })).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByLabelText('Demo card number')).toHaveFocus())
   })
 
   it('preserves step data, places a local order, and clears the active cart', () => {

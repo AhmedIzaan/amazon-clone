@@ -47,20 +47,29 @@ export function SearchPage() {
     const next = new URLSearchParams(searchParams)
     if (value) next.set(name, value)
     else next.delete(name)
-    setSearchParams(next, { replace: true })
+    setSearchParams(next, { replace: true, flushSync: true })
   }
 
   function toggleBrand(brand: string) {
-    const nextBrands = filters.brands.includes(brand)
-      ? filters.brands.filter((item) => item !== brand)
-      : [...filters.brands, brand]
-    updateParam('brand', nextBrands.length ? nextBrands.join(',') : undefined)
+    const next = new URLSearchParams(searchParams)
+    const currentBrands = (next.get('brand') ?? '').split(',').filter(Boolean)
+    const nextBrands = currentBrands.includes(brand)
+      ? currentBrands.filter((item) => item !== brand)
+      : [...currentBrands, brand]
+    if (nextBrands.length) next.set('brand', nextBrands.join(','))
+    else next.delete('brand')
+    setSearchParams(next, { replace: true, flushSync: true })
   }
 
   function clearFilters() {
     const next = new URLSearchParams()
     if (query) next.set('q', query)
-    setSearchParams(next, { replace: true })
+    setSearchParams(next, { replace: true, flushSync: true })
+  }
+
+  function browseAllProducts() {
+    const next = new URLSearchParams()
+    setSearchParams(next, { replace: true, flushSync: true })
   }
 
   const activeChips = [
@@ -157,7 +166,9 @@ export function SearchPage() {
               icon={<SearchX />}
               title="No products match those choices"
               description="Try removing a filter or searching for a broader product, category, or brand."
-              action={<Button onClick={clearFilters}>Clear filters</Button>}
+              action={filterCount > 0
+                ? <Button onClick={clearFilters}>Clear filters</Button>
+                : <Button onClick={browseAllProducts}>Browse all products</Button>}
             />
           )}
         </section>

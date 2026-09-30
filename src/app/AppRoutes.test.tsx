@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 import { AppRoutes } from './AppRoutes'
@@ -33,5 +33,33 @@ describe('application foundation', () => {
     renderRoute('/cart')
 
     expect(screen.getByRole('heading', { name: /your cart is empty/i })).toBeInTheDocument()
+  })
+
+  it('offers a working escape from a no-results query', () => {
+    renderRoute('/search?q=definitely-not-a-product')
+
+    fireEvent.click(screen.getByRole('button', { name: /browse all products/i }))
+
+    expect(screen.getByRole('heading', { name: 'All products' })).toBeInTheDocument()
+    expect(screen.getAllByRole('article')).toHaveLength(6)
+  })
+
+  it("routes Today's finds to discounted products", () => {
+    renderRoute('/')
+
+    expect(screen.getByRole('link', { name: "Today's finds" })).toHaveAttribute(
+      'href',
+      '/search?discount=true',
+    )
+  })
+
+  it('preserves a filter when sorting immediately afterward', () => {
+    renderRoute('/search?q=wireless')
+
+    fireEvent.click(screen.getByLabelText('On sale'))
+    fireEvent.change(screen.getByLabelText('Sort by'), { target: { value: 'price-desc' } })
+
+    expect(screen.getByLabelText('Active filters')).toHaveTextContent('On sale')
+    expect(screen.getByLabelText('Sort by')).toHaveValue('price-desc')
   })
 })

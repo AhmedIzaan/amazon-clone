@@ -1,4 +1,4 @@
-import { ChevronDown, LockKeyhole, MapPin, Menu, ShoppingCart, UserRound } from 'lucide-react'
+import { LockKeyhole, MapPin, Menu, ShoppingCart, UserRound } from 'lucide-react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { SearchBox } from '../search/SearchBox'
 import { useCart } from '../../state/cart-context'
@@ -6,7 +6,13 @@ import { CartToast } from '../cart/CartToast'
 import { useAuth } from '../../state/auth-context'
 import { ComparisonTray } from '../comparison/ComparisonTray'
 
-const categoryLinks = ["Today's finds", 'Home', 'Audio', 'Workspace', 'Outdoors', 'Kitchen']
+const categoryLinks = [
+  { label: "Today's finds", to: '/search?discount=true' },
+  ...['Home', 'Audio', 'Workspace', 'Outdoors', 'Kitchen'].map((label) => ({
+    label,
+    to: `/search?category=${label.toLowerCase()}`,
+  })),
+]
 
 export function AppShell() {
   const { itemCount } = useCart()
@@ -56,7 +62,6 @@ export function AppShell() {
                 {user ? `Hello, ${user.fullName.split(' ')[0]}` : 'Hello, sign in'}
                 <strong>{user ? 'Your account' : 'Account'}</strong>
               </span>
-              <ChevronDown aria-hidden="true" />
             </Link>
             <Link
               className="cart-link"
@@ -73,10 +78,10 @@ export function AppShell() {
           <div className="container category-nav-inner">
             {categoryLinks.map((category) => (
               <NavLink
-                key={category}
-                to={`/search?category=${category.toLowerCase().replaceAll(' ', '-')}`}
+                key={category.label}
+                to={category.to}
               >
-                {category}
+                {category.label}
               </NavLink>
             ))}
           </div>

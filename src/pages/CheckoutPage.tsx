@@ -120,6 +120,12 @@ function validatePayment(payment: PaymentDetails) {
   return errors
 }
 
+function focusInvalidField(field: string) {
+  window.requestAnimationFrame(() => {
+    document.querySelector<HTMLElement>(`[data-field="${field}"] input, [data-field="${field}"] select`)?.focus()
+  })
+}
+
 interface CheckoutFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
   error?: string
@@ -203,14 +209,18 @@ export function CheckoutPage() {
     event.preventDefault()
     const errors = validateAddress(address)
     setAddressErrors(errors)
-    if (Object.keys(errors).length === 0) setStep(1)
+    const firstInvalidField = Object.keys(errors)[0]
+    if (firstInvalidField) focusInvalidField(firstInvalidField)
+    else setStep(1)
   }
 
   function submitPayment(event: FormEvent) {
     event.preventDefault()
     const errors = validatePayment(payment)
     setPaymentErrors(errors)
-    if (Object.keys(errors).length === 0) setStep(3)
+    const firstInvalidField = Object.keys(errors)[0]
+    if (firstInvalidField) focusInvalidField(firstInvalidField)
+    else setStep(3)
   }
 
   function placeOrder() {
@@ -252,7 +262,7 @@ export function CheckoutPage() {
       </ol>
 
       <div className="checkout-layout">
-        <main className="checkout-stage">
+        <section className="checkout-stage" aria-label={checkoutSteps[step]}>
           {step === 0 && (
             <form onSubmit={submitAddress} noValidate>
               <div className="checkout-stage__heading"><MapPin aria-hidden="true" /><div><h2>Delivery address</h2><p>Where should this demo order go?</p></div></div>
@@ -321,7 +331,7 @@ export function CheckoutPage() {
               <div className="checkout-stage__actions"><Button variant="quiet" onClick={() => setStep(2)}><ArrowLeft aria-hidden="true" />Back</Button><Button onClick={placeOrder}>Place demo order · {moneyFormatter.format(totals.total)}</Button></div>
             </section>
           )}
-        </main>
+        </section>
 
         <aside className="checkout-summary" aria-labelledby="checkout-summary-title">
           <header><h2 id="checkout-summary-title">Order summary</h2><span>{itemCount} {itemCount === 1 ? 'item' : 'items'}</span></header>
