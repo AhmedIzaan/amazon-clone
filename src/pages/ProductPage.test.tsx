@@ -3,11 +3,12 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
 import { AppRoutes } from '../app/AppRoutes'
 import { CartProvider } from '../state/CartContext'
+import { AuthProvider } from '../state/AuthContext'
 
 function renderProduct(slug: string) {
   return render(
     <MemoryRouter initialEntries={[`/products/${slug}`]}>
-      <CartProvider><AppRoutes /></CartProvider>
+      <AuthProvider><CartProvider><AppRoutes /></CartProvider></AuthProvider>
     </MemoryRouter>,
   )
 }

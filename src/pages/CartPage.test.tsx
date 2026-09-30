@@ -3,12 +3,13 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
 import { AppRoutes } from '../app/AppRoutes'
 import { CartProvider } from '../state/CartContext'
+import { AuthProvider } from '../state/AuthContext'
 import { CART_STORAGE_KEY } from '../state/cart-context'
 
 function renderRoute(route: string) {
   return render(
     <MemoryRouter initialEntries={[route]}>
-      <CartProvider><AppRoutes /></CartProvider>
+      <AuthProvider><CartProvider><AppRoutes /></CartProvider></AuthProvider>
     </MemoryRouter>,
   )
 }

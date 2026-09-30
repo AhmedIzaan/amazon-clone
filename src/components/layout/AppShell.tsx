@@ -3,11 +3,13 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { SearchBox } from '../search/SearchBox'
 import { useCart } from '../../state/cart-context'
 import { CartToast } from '../cart/CartToast'
+import { useAuth } from '../../state/auth-context'
 
 const categoryLinks = ["Today's finds", 'Home', 'Audio', 'Workspace', 'Outdoors', 'Kitchen']
 
 export function AppShell() {
   const { itemCount } = useCart()
+  const { user } = useAuth()
   const { pathname } = useLocation()
   const isCheckout = pathname.startsWith('/checkout')
 
@@ -44,14 +46,14 @@ export function AppShell() {
             <div className="location-button">
               <MapPin aria-hidden="true" />
               <span>
-                Deliver to <strong>Demo address</strong>
+                Deliver to <strong>{user?.address ? `${user.address.city} ${user.address.postalCode}` : 'Demo address'}</strong>
               </span>
             </div>
-            <Link className="account-link" to="/sign-in" aria-label="Sign in to your account">
+            <Link className="account-link" to={user ? '/account' : '/sign-in'} aria-label={user ? `Open ${user.fullName}'s account` : 'Sign in to your account'}>
               <UserRound aria-hidden="true" />
               <span>
-                Hello, sign in
-                <strong>Account</strong>
+                {user ? `Hello, ${user.fullName.split(' ')[0]}` : 'Hello, sign in'}
+                <strong>{user ? 'Your account' : 'Account'}</strong>
               </span>
               <ChevronDown aria-hidden="true" />
             </Link>

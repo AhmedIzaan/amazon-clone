@@ -26,6 +26,7 @@ import { Button } from '../components/ui/Button'
 import { EmptyState } from '../components/ui/EmptyState'
 import { catalog } from '../data/catalog'
 import { useCart } from '../state/cart-context'
+import { useAuth } from '../state/auth-context'
 
 const moneyFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 const checkoutSteps = ['Delivery address', 'Delivery method', 'Payment', 'Review order']
@@ -61,18 +62,18 @@ interface CheckoutDraft {
   deliveryMethod: DeliveryMethod
 }
 
-function readCheckoutDraft(): CheckoutDraft {
+function readCheckoutDraft(fallbackAddress: CheckoutAddress = demoAddress): CheckoutDraft {
   try {
     const stored = window.sessionStorage.getItem(CHECKOUT_DRAFT_KEY)
-    if (!stored) return { step: 0, address: demoAddress, deliveryMethod: 'standard' }
+    if (!stored) return { step: 0, address: fallbackAddress, deliveryMethod: 'standard' }
     const parsed = JSON.parse(stored) as Partial<CheckoutDraft>
     return {
       step: Math.max(0, Math.min(3, Number(parsed.step) || 0)),
-      address: { ...demoAddress, ...parsed.address },
+      address: { ...fallbackAddress, ...parsed.address },
       deliveryMethod: parsed.deliveryMethod === 'express' ? 'express' : 'standard',
     }
   } catch {
-    return { step: 0, address: demoAddress, deliveryMethod: 'standard' }
+    return { step: 0, address: fallbackAddress, deliveryMethod: 'standard' }
   }
 }
 
@@ -138,7 +139,17 @@ function CheckoutField({ label, error, id, ...props }: CheckoutFieldProps) {
 export function CheckoutPage() {
   const navigate = useNavigate()
   const { items, itemCount, clearCart } = useCart()
-  const initialDraft = useMemo(() => readCheckoutDraft(), [])
+  const { user } = useAuth()
+  const [initialDraft] = useState(() => readCheckoutDraft(user?.address ? {
+    fullName: user.address.recipient,
+    email: user.email,
+    phone: user.phone,
+    address: user.address.street,
+    apartment: user.address.apartment,
+    city: user.address.city,
+    state: user.address.state,
+    postalCode: user.address.postalCode,
+  } : demoAddress))
   const [step, setStep] = useState(initialDraft.step)
   const [address, setAddress] = useState(initialDraft.address)
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>(initialDraft.deliveryMethod)

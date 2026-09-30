@@ -4,6 +4,8 @@ import { MemoryRouter } from 'react-router-dom'
 import { AppRoutes } from '../app/AppRoutes'
 import { ORDERS_STORAGE_KEY } from '../checkout/order'
 import { CartProvider } from '../state/CartContext'
+import { AuthProvider } from '../state/AuthContext'
+import { AUTH_STORAGE_KEY } from '../state/auth-context'
 import { CART_STORAGE_KEY } from '../state/cart-context'
 
 function seedCart() {
@@ -16,7 +18,7 @@ function seedCart() {
 function renderRoute(route = '/checkout') {
   return render(
     <MemoryRouter initialEntries={[route]}>
-      <CartProvider><AppRoutes /></CartProvider>
+      <AuthProvider><CartProvider><AppRoutes /></CartProvider></AuthProvider>
     </MemoryRouter>,
   )
 }
@@ -96,5 +98,22 @@ describe('CheckoutPage', () => {
     expect(screen.getByRole('heading', { name: /delivery method/i })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: /delivery address/i }))
     expect(screen.getByLabelText('Full name')).toHaveValue('Casey Demo')
+  })
+
+  it('prefills a new checkout from the signed-in saved address', () => {
+    seedCart()
+    window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({
+      signedIn: true,
+      profile: {
+        fullName: 'Jamie Rivera', email: 'jamie@example.com', phone: '(206) 555-0180',
+        address: { label: 'Work', recipient: 'Jamie Rivera', street: '500 Pine Street', apartment: 'Suite 20', city: 'Seattle', state: 'WA', postalCode: '98101' },
+      },
+    }))
+    renderRoute()
+
+    expect(screen.getByLabelText('Full name')).toHaveValue('Jamie Rivera')
+    expect(screen.getByLabelText('Email')).toHaveValue('jamie@example.com')
+    expect(screen.getByLabelText('Street address')).toHaveValue('500 Pine Street')
+    expect(screen.getByLabelText('State')).toHaveValue('WA')
   })
 })

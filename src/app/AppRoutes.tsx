@@ -8,6 +8,8 @@ import { NotFoundPage } from '../pages/NotFoundPage'
 import { ProductPage } from '../pages/ProductPage'
 import { SearchPage } from '../pages/SearchPage'
 import { SignInPage } from '../pages/SignInPage'
+import { CreateAccountPage } from '../pages/CreateAccountPage'
+import { AccountPage } from '../pages/AccountPage'
 
 export function AppRoutes() {
   return (
@@ -20,6 +22,8 @@ export function AppRoutes() {
         <Route path="checkout" element={<CheckoutPage />} />
         <Route path="checkout/success" element={<CheckoutSuccessPage />} />
         <Route path="sign-in" element={<SignInPage />} />
+        <Route path="create-account" element={<CreateAccountPage />} />
+        <Route path="account" element={<AccountPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
