@@ -74,14 +74,14 @@ function ProductDetail({ product }: { product: Product }) {
 
   function addSelectionToCart() {
     if (!canPurchase) return
-    addItem(product.id, quantity)
+    addItem(product.id, quantity, selectedVariant?.id)
     const variantCopy = selectedVariant ? ` in ${selectedVariant.value}` : ''
     setConfirmation(`${quantity} ${quantity === 1 ? 'item' : 'items'}${variantCopy} added to cart`)
   }
 
   function buyNow() {
     if (!canPurchase) return
-    addItem(product.id, quantity)
+    addItem(product.id, quantity, selectedVariant?.id)
     navigate('/checkout')
   }
 

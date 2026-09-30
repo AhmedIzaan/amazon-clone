@@ -25,9 +25,9 @@ describe('application foundation', () => {
     expect(screen.getAllByRole('article').length).toBeGreaterThanOrEqual(6)
   })
 
-  it('renders a route shell for the cart', () => {
+  it('renders the empty cart experience', () => {
     renderRoute('/cart')
 
-    expect(screen.getByRole('heading', { name: /review without friction/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /your cart is empty/i })).toBeInTheDocument()
   })
 })

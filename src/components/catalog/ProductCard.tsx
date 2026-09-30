@@ -24,7 +24,8 @@ export function ProductCard({ product, compact = false }: ProductCardProps) {
   }, [isAdded])
 
   function handleAdd() {
-    addItem(product.id)
+    const defaultVariant = product.variants.find((variant) => variant.inStock)
+    addItem(product.id, 1, defaultVariant?.id)
     setIsAdded(true)
   }
 

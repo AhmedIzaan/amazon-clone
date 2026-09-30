@@ -2,6 +2,7 @@ import { ChevronDown, MapPin, Menu, ShoppingCart, UserRound } from 'lucide-react
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { SearchBox } from '../search/SearchBox'
 import { useCart } from '../../state/cart-context'
+import { CartToast } from '../cart/CartToast'
 
 const categoryLinks = ["Today's finds", 'Home', 'Audio', 'Workspace', 'Outdoors', 'Kitchen']
 
@@ -78,6 +79,7 @@ export function AppShell() {
           <p>A focused marketplace prototype. No real purchases are processed.</p>
         </div>
       </footer>
+      <CartToast />
     </div>
   )
 }
