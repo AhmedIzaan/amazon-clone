@@ -1,5 +1,5 @@
-import { ChevronDown, MapPin, Menu, ShoppingCart, UserRound } from 'lucide-react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { ChevronDown, LockKeyhole, MapPin, Menu, ShoppingCart, UserRound } from 'lucide-react'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { SearchBox } from '../search/SearchBox'
 import { useCart } from '../../state/cart-context'
 import { CartToast } from '../cart/CartToast'
@@ -8,12 +8,23 @@ const categoryLinks = ["Today's finds", 'Home', 'Audio', 'Workspace', 'Outdoors'
 
 export function AppShell() {
   const { itemCount } = useCart()
+  const { pathname } = useLocation()
+  const isCheckout = pathname.startsWith('/checkout')
 
   return (
     <div className="site-shell">
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
+      {isCheckout ? (
+        <header className="checkout-site-header">
+          <div className="container checkout-site-header__inner">
+            <Link className="brand" to="/" aria-label="Aster home">aster<span>.</span></Link>
+            <p><LockKeyhole aria-hidden="true" /> Secure demo checkout</p>
+            {pathname === '/checkout' ? <Link to="/cart">Return to cart ({itemCount})</Link> : <span />}
+          </div>
+        </header>
+      ) : (
       <header className="site-header">
         <div className="utility-bar">
           <div className="container utility-bar__inner">
@@ -68,6 +79,7 @@ export function AppShell() {
           </div>
         </nav>
       </header>
+      )}
       <main id="main-content" className="site-main">
         <Outlet />
       </main>
@@ -79,7 +91,7 @@ export function AppShell() {
           <p>A focused marketplace prototype. No real purchases are processed.</p>
         </div>
       </footer>
-      <CartToast />
+      {!isCheckout && <CartToast />}
     </div>
   )
 }
