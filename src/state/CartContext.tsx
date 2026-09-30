@@ -12,14 +12,14 @@ interface CartState {
   quantities: Record<string, number>
 }
 
-type CartAction = { type: 'add'; productId: string }
+type CartAction = { type: 'add'; productId: string; quantity: number }
 
 function cartReducer(state: CartState, action: CartAction): CartState {
   if (action.type === 'add') {
     return {
       quantities: {
         ...state.quantities,
-        [action.productId]: (state.quantities[action.productId] ?? 0) + 1,
+        [action.productId]: (state.quantities[action.productId] ?? 0) + action.quantity,
       },
     }
   }
@@ -45,7 +45,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<CartContextValue>(() => ({
     itemCount: Object.values(state.quantities).reduce((total, quantity) => total + quantity, 0),
-    addItem: (productId) => dispatch({ type: 'add', productId }),
+    addItem: (productId, quantity = 1) => dispatch({ type: 'add', productId, quantity }),
   }), [state])
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react'
 
 export interface CartContextValue {
   itemCount: number
-  addItem: (productId: string) => void
+  addItem: (productId: string, quantity?: number) => void
 }
 
 export const CartContext = createContext<CartContextValue | null>(null)

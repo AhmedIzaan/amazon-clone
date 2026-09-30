@@ -25,6 +25,11 @@ export interface ProductReview {
   verified: boolean
 }
 
+export interface ProductSpecification {
+  label: string
+  value: string
+}
+
 export interface Product {
   id: string
   slug: string
@@ -40,6 +45,7 @@ export interface Product {
   images: ProductImage[]
   variants: ProductVariant[]
   reviews: ProductReview[]
+  specifications: ProductSpecification[]
   badges: string[]
   inStock: boolean
   deliveryDays: number
