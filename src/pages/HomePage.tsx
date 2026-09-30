@@ -17,6 +17,7 @@ import { ProductCard } from '../components/catalog/ProductCard'
 import { Badge } from '../components/ui/Badge'
 import { catalog } from '../data/catalog'
 import { getRecentlyViewedProducts } from '../state/recently-viewed'
+import { assetUrl } from '../utils/asset-url'
 
 const categories = [
   { label: 'Home', detail: '124 useful finds', icon: Home, slug: 'home' },
@@ -37,7 +38,7 @@ export function HomePage() {
       <section className="home-hero container" aria-labelledby="hero-title">
         <img
           className="home-hero__image"
-          src="/images/products/homepage-hero.webp"
+          src={assetUrl('images/products/homepage-hero.webp')}
           alt=""
           width="1600"
           height="800"

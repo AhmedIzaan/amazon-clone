@@ -1,4 +1,5 @@
 import type { Product } from '../types/catalog'
+import { assetUrl } from '../utils/asset-url'
 
 export const catalog: Product[] = [
   {
@@ -13,7 +14,7 @@ export const catalog: Product[] = [
     compareAtPrice: { amount: 159, currency: 'USD' },
     rating: 4.7,
     reviewCount: 824,
-    images: [{ src: '/images/products/arc-headphones.webp', alt: 'Matte black over-ear headphones' }],
+    images: [{ src: assetUrl('images/products/arc-headphones.webp'), alt: 'Matte black over-ear headphones' }],
     variants: [
       { id: 'arc-black', label: 'Color', value: 'Graphite', inStock: true },
       { id: 'arc-sand', label: 'Color', value: 'Sand', inStock: true },
@@ -58,7 +59,7 @@ export const catalog: Product[] = [
     price: { amount: 48, currency: 'USD' },
     rating: 4.5,
     reviewCount: 316,
-    images: [{ src: '/images/products/halo-lamp.webp', alt: 'Cream table lamp with a stone base' }],
+    images: [{ src: assetUrl('images/products/halo-lamp.webp'), alt: 'Cream table lamp with a stone base' }],
     variants: [{ id: 'halo-cream', label: 'Color', value: 'Cream', inStock: true }],
     reviews: [{ id: 'halo-review-1', author: 'Priya S.', rating: 5, title: 'Warm light without the bulk', body: 'Fits on a small nightstand and the touch control is easy to find in the dark. The lowest setting is especially pleasant.', verified: true }],
     specifications: [
@@ -82,7 +83,7 @@ export const catalog: Product[] = [
     price: { amount: 72, currency: 'USD' },
     rating: 4.8,
     reviewCount: 192,
-    images: [{ src: '/images/products/trail-daypack.webp', alt: 'Olive green everyday daypack' }],
+    images: [{ src: assetUrl('images/products/trail-daypack.webp'), alt: 'Olive green everyday daypack' }],
     variants: [
       { id: 'trail-olive', label: 'Color', value: 'Olive', inStock: true },
       { id: 'trail-navy', label: 'Color', value: 'Navy', inStock: false },
@@ -110,7 +111,7 @@ export const catalog: Product[] = [
     compareAtPrice: { amount: 32, currency: 'USD' },
     rating: 4.6,
     reviewCount: 1284,
-    images: [{ src: '/images/products/stone-tumbler.webp', alt: 'Stone-colored insulated tumbler' }],
+    images: [{ src: assetUrl('images/products/stone-tumbler.webp'), alt: 'Stone-colored insulated tumbler' }],
     variants: [
       { id: 'tumbler-stone', label: 'Color', value: 'Stone', inStock: true },
       { id: 'tumbler-forest', label: 'Color', value: 'Forest', inStock: true },
@@ -139,7 +140,7 @@ export const catalog: Product[] = [
     compareAtPrice: { amount: 109, currency: 'USD' },
     rating: 4.7,
     reviewCount: 647,
-    images: [{ src: '/images/products/grove-keyboard.webp', alt: 'Cream and forest green wireless keyboard' }],
+    images: [{ src: assetUrl('images/products/grove-keyboard.webp'), alt: 'Cream and forest green wireless keyboard' }],
     variants: [{ id: 'grove-forest', label: 'Color', value: 'Forest', inStock: true }],
     reviews: [{ id: 'grove-review-1', author: 'Eli W.', rating: 5, title: 'Quiet enough for shared work', body: 'The tactile feel is satisfying without the usual mechanical-keyboard noise. Switching among three devices takes one key press.', verified: true }],
     specifications: [
@@ -164,7 +165,7 @@ export const catalog: Product[] = [
     compareAtPrice: { amount: 69, currency: 'USD' },
     rating: 4.4,
     reviewCount: 938,
-    images: [{ src: '/images/products/pocket-vacuum.webp', alt: 'Deep green cordless handheld vacuum' }],
+    images: [{ src: assetUrl('images/products/pocket-vacuum.webp'), alt: 'Deep green cordless handheld vacuum' }],
     variants: [{ id: 'vacuum-green', label: 'Color', value: 'Forest', inStock: true }],
     reviews: [{ id: 'vacuum-review-1', author: 'Nora B.', rating: 4, title: 'Ideal for quick cleanups', body: 'Strong enough for crumbs and car-seat grit, and much easier to grab than a full vacuum. The washable filter is a welcome touch.', verified: true }],
     specifications: [

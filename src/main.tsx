@@ -9,9 +9,11 @@ import './styles/tokens.css'
 import './styles/global.css'
 import './styles/app.css'
 
+const routerBase = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={routerBase}>
       <AuthProvider>
         <ComparisonProvider>
           <CartProvider>
